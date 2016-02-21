@@ -16,6 +16,7 @@ coverage
 
 # Binaries
 dist
+src/assets/css/build
 
 # Dependency directory
 node_modules
@@ -33,7 +34,7 @@ node_modules
 docs
 
 # Bower components
-public/assets/components/
+src/assets/components
 
 # phantomJS
 phantomjsdriver.log*
