@@ -62,7 +62,7 @@ function watch() {
 function compileSass() {
 	return gulp.src('src/assets/scss/*.{scss,sass}')
     	.pipe(plugins.sass())
-    	.pipe(gulp.dest('src/assets/css/build'))
+    	.pipe(gulp.dest('src/assets/css/build'));
 }
 
 function compileCssAndJs() {
@@ -72,8 +72,8 @@ function compileCssAndJs() {
     	.pipe(plugins.if('*.js', plugins.uglify()))
     	// css actions
     	.pipe(plugins.if('*.css', plugins.cssnano()))
-    	.pipe(gulp.dest('dist'))
-};
+    	.pipe(gulp.dest('dist'));
+}
 
 function autoreload() {
 	browserSync.init({
@@ -81,4 +81,4 @@ function autoreload() {
 			baseDir: 'src'
 		},
 	});
-};
+}
