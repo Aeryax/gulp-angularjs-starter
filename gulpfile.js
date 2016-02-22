@@ -17,12 +17,13 @@ gulp.task('serve', gulp.series(
 
 // gulp build
 gulp.task('build', gulp.series(
-
+	cleanDistFolder,
+	gulp.parallel(compileCssAndJs, minimizeImages, moveFonts)
 ));
 
 // gulp clean
 gulp.task('clean', gulp.parallel(
-
+	cleanDistFolder
 ));
 
 // gulp test-unit
@@ -51,6 +52,15 @@ gulp.task('doc-html', gulp.series(
 * Private Tasks
 * ================================================
 **/
+
+function cleanDistFolder() {
+	return del(['dist']);
+}
+
+function moveFonts() {
+	return gulp.src('src/assets/fonts/**/*')
+		.pipe(gulp.dest('dist/assets/fonts'));
+}
 
 function watch() {
 	gulp.watch('src/assets/scss/*.{scss,sass}', compileSass);
@@ -81,4 +91,12 @@ function autoreload() {
 			baseDir: 'src'
 		},
 	});
+}
+
+function minimizeImages() {
+	return gulp.src('src/assets/img/**/*.+(png|PNG|jpg|JPG|gif|GIF|svg|SVG)')
+		.pipe(plugins.cache(plugins.imagemin({
+			interlaced: true
+		})))
+		.pipe(gulp.dest('dist/assets/img'));
 }
