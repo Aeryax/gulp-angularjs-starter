@@ -24,7 +24,8 @@
     "gulp-sass": "^2.2.0",
     "gulp-uglify": "^1.5.2",
     "gulp-useref": "^3.0.6",
-    "gulp-util": "^3.0.7"
+    "gulp-util": "^3.0.7",
+    "gulp-zip": "^3.2.0"
   },
   "bugs": {
     "url": "https://github.com/Aeryax/gulp-angularjs-starter/issues"

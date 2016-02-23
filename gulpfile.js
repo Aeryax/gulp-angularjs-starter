@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var del = require('del');
+var fs = require('fs');
 var browserSync = require('browser-sync').create();
 
 /**
@@ -45,6 +46,12 @@ gulp.task('doc-markdown', gulp.series(
 gulp.task('doc-html', gulp.series(
 
 ));
+
+// gulp build-zip
+gulp.task('build-zip', zip);
+
+// gulp clean-zip
+gulp.task('clean-zip', cleanZip);
 
 
 /**
@@ -98,10 +105,41 @@ function minimizeImages() {
 		.pipe(plugins.cache(plugins.imagemin({
 			interlaced: true
 		})))
-		.on(plugins.notify('test'))
 		.pipe(gulp.dest('dist/assets/img'));
+}
+
+
+function zip() {
+	if (fs.existsSync(__dirname + '/dist')) {
+		var name = require(__dirname + '/package.json').name;
+		var version = require(__dirname + '/package.json').version;
+
+		var buildDate = new Date();
+		var yyyy = buildDate.getFullYear();
+		var mm = buildDate.getMonth() < 9 ? '0' + (buildDate.getMonth() + 1) : (buildDate.getMonth() + 1);
+		var dd  = buildDate.getDate() < 10 ? '0' + buildDate.getDate() : buildDate.getDate();
+		var hh = buildDate.getHours() < 10 ? '0' + buildDate.getHours() : buildDate.getHours();
+		var min = buildDate.getMinutes() < 10 ? '0' + buildDate.getMinutes() : buildDate.getMinutes();
+		var ss = buildDate.getSeconds() < 10 ? '0' + buildDate.getSeconds() : buildDate.getSeconds();
+
+		return gulp.src('dist/**/*')
+			.pipe(plugins.zip(name + '-' + version + '-' + yyyy + mm + dd + '-' + hh + min + ss + '.zip'))
+			.pipe(gulp.dest('.'));
+
+	} else {
+		throw new plugins.util.PluginError({
+			plugin: 'archive',
+			message: 'build directory is empty, you should start gulp build'
+		});
+	}
 
 }
+
+function cleanZip() {
+	var name = require(__dirname + '/package.json').name;
+	return del([name + '-*' + '.zip']);
+}
+
 
 /**
 * ================================================
