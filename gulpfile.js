@@ -98,5 +98,25 @@ function minimizeImages() {
 		.pipe(plugins.cache(plugins.imagemin({
 			interlaced: true
 		})))
+		.on(plugins.notify('test'))
 		.pipe(gulp.dest('dist/assets/img'));
+
 }
+
+/**
+* ================================================
+* Helpers
+* ================================================
+**/
+
+var showError = function(task) {
+	return function(err) {
+		plugins.util.log(plugins.util.colors.bgRed(task + ' error:'), plugins.util.colors.red(err));
+	};
+};
+
+var showSuccess = function(task) {
+	return function(msg) {
+		plugins.util.log(plugins.util.colors.bgGreen(task + ' :'), plugins.util.colors.green(msg));
+	};
+};
