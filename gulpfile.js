@@ -48,7 +48,11 @@ gulp.task('doc-html', gulp.series(
 ));
 
 // gulp build-zip
-gulp.task('build-zip', zip);
+gulp.task('build-zip', gulp.series(
+  gulp.parallel(cleanDistFolder, cleanZip),
+	gulp.parallel(compileCssAndJs, minimizeImages, moveFonts),
+	zip
+));
 
 // gulp clean-zip
 gulp.task('clean-zip', cleanZip);
