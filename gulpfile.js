@@ -3,6 +3,7 @@ var plugins = require('gulp-load-plugins')();
 var del = require('del');
 var fs = require('fs');
 var browserSync = require('browser-sync').create();
+var notifier = require('node-notifier');
 
 /**
 * ================================================
@@ -83,7 +84,8 @@ function watch() {
 function compileSass() {
 	return gulp.src('src/assets/scss/*.{scss,sass}')
     	.pipe(plugins.sass())
-    	.pipe(gulp.dest('src/assets/css/build'));
+    	.pipe(gulp.dest('src/assets/css/build'))
+			.on('error', showSuccess('Compile SASS'));
 }
 
 function compileCssAndJs() {
@@ -93,7 +95,8 @@ function compileCssAndJs() {
     	.pipe(plugins.if('*.js', plugins.uglify()))
     	// css actions
     	.pipe(plugins.if('*.css', plugins.cssnano()))
-    	.pipe(gulp.dest('dist'));
+    	.pipe(gulp.dest('dist'))
+			.on('error', showSuccess('Compile CSS and JS'));
 }
 
 function autoreload() {
@@ -102,6 +105,7 @@ function autoreload() {
 			baseDir: 'src'
 		},
 	});
+	showNotification('Autoreload', 'Your app is now live');
 }
 
 function minimizeImages() {
@@ -154,11 +158,25 @@ function cleanZip() {
 var showError = function(task) {
 	return function(err) {
 		plugins.util.log(plugins.util.colors.bgRed(task + ' error:'), plugins.util.colors.red(err));
+		showNotification(task, err);
 	};
 };
 
 var showSuccess = function(task) {
-	return function(msg) {
-		plugins.util.log(plugins.util.colors.bgGreen(task + ' :'), plugins.util.colors.green(msg));
+	return function() {
+		plugins.util.log(plugins.util.colors.bgGreen(task + ' :'), plugins.util.colors.green('success'));
+		showNotification(task, 'Done successfully');
 	};
+};
+
+var showNotification = function(title, message) {
+	notifier.notify({
+	  title: title,
+	  message: message,
+	  // icon: path.join(__dirname, 'coulson.jpg'),
+	  sound: true,
+	  wait: false
+	}, function (err, response) {
+	  // Response is response from notification
+	});
 };
