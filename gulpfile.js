@@ -85,18 +85,19 @@ function compileSass() {
 	return gulp.src('src/assets/scss/*.{scss,sass}')
     	.pipe(plugins.sass())
     	.pipe(gulp.dest('src/assets/css/build'))
-			.on('error', showSuccess('Compile SASS'));
+			.on('error', showError('Compile SASS'));
 }
 
 function compileCssAndJs() {
 	return gulp.src('src/*.html')
     	.pipe(plugins.useref())
     	// js actions
+      .pipe(plugins.if('*.js', plugins.stripDebug()))
     	.pipe(plugins.if('*.js', plugins.uglify()))
     	// css actions
     	.pipe(plugins.if('*.css', plugins.cssnano()))
     	.pipe(gulp.dest('dist'))
-			.on('error', showSuccess('Compile CSS and JS'));
+			.on('error', showError('Compile CSS and JS'));
 }
 
 function autoreload() {
