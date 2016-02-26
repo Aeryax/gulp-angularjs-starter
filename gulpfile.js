@@ -94,8 +94,12 @@ function compileCssAndJs() {
     	// js actions
       .pipe(plugins.if('*.js', plugins.stripDebug()))
     	.pipe(plugins.if('*.js', plugins.uglify()))
+			.pipe(plugins.if('*.js', plugins.rev()))
     	// css actions
     	.pipe(plugins.if('*.css', plugins.cssnano()))
+			.pipe(plugins.if('*.css', plugins.rev()))
+			// html actions
+			.pipe(plugins.revReplace())
     	.pipe(gulp.dest('dist'))
 			.on('error', showError('Compile CSS and JS'));
 }
