@@ -71,6 +71,9 @@ function cleanDistFolder() {
 
 function moveFonts() {
 	return gulp.src('src/assets/fonts/**/*')
+		.pipe(plugins.size({
+			title: 'Fonts'
+		}))
 		.pipe(gulp.dest('dist/assets/fonts'));
 }
 
@@ -110,6 +113,9 @@ function compileCssAndJs() {
 				collapseWhitespace: true
 			})))
 			.pipe(plugins.revReplace())
+			.pipe(plugins.size({
+				title: 'Assets'
+			}))
     	.pipe(gulp.dest('dist'))
 			.on('error', showError('Compile CSS and JS'));
 }
@@ -128,6 +134,9 @@ function minimizeImages() {
 		.pipe(plugins.cache(plugins.imagemin({
 			interlaced: true
 		})))
+		.pipe(plugins.size({
+			title: 'Images'
+		}))
 		.pipe(gulp.dest('dist/assets/img'));
 }
 
@@ -147,6 +156,9 @@ function zip() {
 
 		return gulp.src('dist/**/*')
 			.pipe(plugins.zip(name + '-' + version + '-' + yyyy + mm + dd + '-' + hh + min + ss + '.zip'))
+			.pipe(plugins.size({
+				title: 'ZIP'
+			}))
 			.pipe(gulp.dest('.'));
 
 	} else {
