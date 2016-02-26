@@ -96,10 +96,15 @@ function compileCssAndJs() {
     	.pipe(plugins.if('*.js', plugins.uglify()))
 			.pipe(plugins.if('*.js', plugins.rev()))
     	// css actions
+			.pipe(plugins.if('*.css', plugins.uncss({
+	    	html: ['src/**/*.html']
+	    })))
     	.pipe(plugins.if('*.css', plugins.cssnano()))
 			.pipe(plugins.if('*.css', plugins.rev()))
 			// html actions
-			.pipe(plugins.if('*.html', plugins.htmlmin({ collapseWhitespace: true })))
+			.pipe(plugins.if('*.html', plugins.htmlmin({
+				collapseWhitespace: true
+			})))
 			.pipe(plugins.revReplace())
     	.pipe(gulp.dest('dist'))
 			.on('error', showError('Compile CSS and JS'));
