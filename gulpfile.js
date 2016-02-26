@@ -99,6 +99,7 @@ function compileCssAndJs() {
     	.pipe(plugins.if('*.css', plugins.cssnano()))
 			.pipe(plugins.if('*.css', plugins.rev()))
 			// html actions
+			.pipe(plugins.if('*.html', plugins.htmlmin({ collapseWhitespace: true })))
 			.pipe(plugins.revReplace())
     	.pipe(gulp.dest('dist'))
 			.on('error', showError('Compile CSS and JS'));
