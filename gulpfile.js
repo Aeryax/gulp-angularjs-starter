@@ -99,6 +99,10 @@ function compileCssAndJs() {
 			.pipe(plugins.if('*.css', plugins.uncss({
 	    	html: ['src/**/*.html']
 	    })))
+			.pipe(plugins.if('*.css', plugins.autoprefixer({
+				browsers: ['last 2 versions'],
+				cascade: false
+			})))
     	.pipe(plugins.if('*.css', plugins.cssnano()))
 			.pipe(plugins.if('*.css', plugins.rev()))
 			// html actions
