@@ -94,7 +94,9 @@ function compileSass() {
 function compileCssAndJs() {
 	return gulp.src('src/*.html')
     	.pipe(plugins.useref())
-    	// js actions
+      // all
+      .pipe(plugins.stripComments())
+      // js actions
       .pipe(plugins.if('*.js', plugins.stripDebug()))
     	.pipe(plugins.if('*.js', plugins.uglify()))
 			.pipe(plugins.if('*.js', plugins.rev()))
