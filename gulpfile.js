@@ -48,6 +48,11 @@ gulp.task('doc-html', gulp.series(
 
 ));
 
+// gulp release
+gulp.task('release', gulp.series(
+	generateGithubPages
+));
+
 // gulp build-zip
 gulp.task('build-zip', gulp.series(
   gulp.parallel(cleanDistFolder, cleanZip),
@@ -67,6 +72,11 @@ gulp.task('clean-zip', cleanZip);
 
 function cleanDistFolder() {
 	return del(['dist']);
+}
+
+function generateGithubPages() {
+	return gulp.src('dist/**/*')
+		.pipe(plugins.ghPages());
 }
 
 function moveFonts() {
