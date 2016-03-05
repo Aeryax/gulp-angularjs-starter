@@ -20,6 +20,7 @@ gulp.task('serve', gulp.series(
 // gulp build
 gulp.task('build', gulp.series(
 	cleanDistFolder,
+	compileSass,
 	gulp.parallel(compileCssAndJs, minimizeImages, moveFonts)
 ));
 
@@ -56,6 +57,7 @@ gulp.task('release', gulp.series(
 // gulp build-zip
 gulp.task('build-zip', gulp.series(
   gulp.parallel(cleanDistFolder, cleanZip),
+	compileSass,
 	gulp.parallel(compileCssAndJs, minimizeImages, moveFonts),
 	zip
 ));
@@ -96,6 +98,10 @@ function watch() {
 
 function compileSass() {
 	return gulp.src('src/assets/scss/*.{scss,sass}')
+			.pipe(plugins.cached('sass-cache'))
+			.pipe(plugins.sassLint())
+			.pipe(plugins.sassLint.format())
+			//.pipe(plugins.sassLint.failOnError())
     	.pipe(plugins.sass())
     	.pipe(gulp.dest('src/assets/css/build'))
 			.on('error', showError('Compile SASS'));
@@ -104,9 +110,8 @@ function compileSass() {
 function compileCssAndJs() {
 	return gulp.src('src/*.html')
     	.pipe(plugins.useref())
-      // all
-      .pipe(plugins.stripComments())
       // js actions
+			.pipe(plugins.if('*.js', plugins.stripComments()))
       .pipe(plugins.if('*.js', plugins.stripDebug()))
     	.pipe(plugins.if('*.js', plugins.uglify()))
 			.pipe(plugins.if('*.js', plugins.rev()))
@@ -121,6 +126,7 @@ function compileCssAndJs() {
     	.pipe(plugins.if('*.css', plugins.cssnano()))
 			.pipe(plugins.if('*.css', plugins.rev()))
 			// html actions
+			.pipe(plugins.if('*.html', plugins.stripComments()))
 			.pipe(plugins.if('*.html', plugins.htmlmin({
 				collapseWhitespace: true
 			})))
