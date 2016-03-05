@@ -5,6 +5,7 @@ var fs = require('fs');
 var browserSync = require('browser-sync').create();
 var notifier = require('node-notifier');
 var karma = require('karma').Server;
+var webdriver = require('gulp-protractor').webdriver_update;
 
 /**
 * ================================================
@@ -39,7 +40,9 @@ gulp.task('test-unit', gulp.series(
 
 // gulp e2e
 gulp.task('test-e2e', gulp.series(
-
+	gulp.parallel(cleanProtractor, updateProtractor, compileSass),
+	runProtractor,
+	cleanProtractor
 ));
 
 // gulp doc-markdown
@@ -205,6 +208,33 @@ function runKarma(done) {
 	    configFile: __dirname + '/karma.conf.js',
 	    singleRun: true
 	}, done).start();
+}
+
+function cleanProtractor() {
+	return del(['.protractor', 'phantomjsdriver.log']);
+}
+
+function runProtractor() {
+
+	var server = gulp.src('src')
+	 .pipe(plugins.webserver({
+		 livereload: false,
+		 directoryListing: false,
+		 open: false,
+		 port: 3000
+	 }));
+
+	gulp.src('test/e2e/**/*.e2e.js')
+		.pipe(plugins.protractor.protractor({
+			configFile: __dirname + '/protractor.conf.js'
+		}))
+		.on('error', showError('runProtractor'));
+
+	return server.emit('kill');
+}
+
+function updateProtractor(done) {
+	webdriver({}, done);
 }
 
 
