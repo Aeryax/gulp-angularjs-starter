@@ -4,6 +4,7 @@ var del = require('del');
 var fs = require('fs');
 var browserSync = require('browser-sync').create();
 var notifier = require('node-notifier');
+var karma = require('karma').Server;
 
 /**
 * ================================================
@@ -31,7 +32,9 @@ gulp.task('clean', gulp.parallel(
 
 // gulp test-unit
 gulp.task('test-unit', gulp.series(
-
+	cleanKarma,
+	runKarma,
+	cleanKarma
 ));
 
 // gulp e2e
@@ -191,6 +194,17 @@ function zip() {
 function cleanZip() {
 	var name = require(__dirname + '/package.json').name;
 	return del([name + '-*' + '.zip']);
+}
+
+function cleanKarma() {
+	return del(['.karma']);
+}
+
+function runKarma(done) {
+	return new karma({
+	    configFile: __dirname + '/karma.conf.js',
+	    singleRun: true
+	}, done).start();
 }
 
 

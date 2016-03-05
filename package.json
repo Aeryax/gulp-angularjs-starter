@@ -37,7 +37,12 @@
     "gulp-useref": "^3.0.6",
     "gulp-util": "^3.0.7",
     "gulp-zip": "^3.2.0",
-    "node-notifier": "^4.5.0"
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.21",
+    "karma-jasmine": "^0.3.7",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "node-notifier": "^4.5.0",
+    "phantomjs-prebuilt": "^2.1.4"
   },
   "bugs": {
     "url": "https://github.com/Aeryax/gulp-angularjs-starter/issues"
