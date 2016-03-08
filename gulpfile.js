@@ -105,8 +105,8 @@ function watch() {
 function compileSass() {
 	return gulp.src('src/assets/scss/*.{scss,sass}')
 			.pipe(plugins.cached('sass-cache'))
-			.pipe(plugins.sassLint())
-			.pipe(plugins.sassLint.format())
+			// .pipe(plugins.sassLint())
+			// .pipe(plugins.sassLint.format())
 			//.pipe(plugins.sassLint.failOnError())
     	.pipe(plugins.sass())
     	.pipe(gulp.dest('src/assets/css/build'))
